@@ -1,0 +1,36 @@
+# Node
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# VSCode
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# env
+.env
+
+# distribution
+dist/
+build/
+
+# Docker
+docker-compose.override.yml
+
+# Optional
+.idea/
+*.iml

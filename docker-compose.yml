@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Python财务引擎
+  financial-engine:
+    build:
+      context: ./finance-engine
+      dockerfile: Dockerfile
+    container_name: financial-engine
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./finance-engine:/app
+    command: python api_server.py
+
+  # Express后端
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: financial-backend
+    ports:
+      - "3001:3000"
+    environment:
+      - PYTHON_API=http://financial-engine:8000
+      - NODE_ENV=development
+    depends_on:
+      - financial-engine
+    volumes:
+      - ./backend:/app
+    command: npm run dev
+
+  # React前端
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: financial-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+    command: npm start
+
+networks:
+  default:
+    name: financial-network
